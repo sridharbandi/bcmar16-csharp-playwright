@@ -25,6 +25,9 @@ jobs:
       - name: Create a test build
         run: dotnet build --configuration Release
      
+      - name: Install Playwright browsers
+        run: pwsh playwright-nunit/bin/Release/net9.0/playwright.ps1 install
+
       - name: Run Csharp Playwright tests
         run: dotnet test --configuration Release --no-build --logger "html;LogFileName=index.html"
     
