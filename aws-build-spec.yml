@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: latest
+  pre_build:
+    commands:
+      - echo Restoring dependencies...
+      - dotnet restore
+  build:
+    commands:
+      - echo Building the project...
+      - dotnet build --configuration Release
+      - echo Installing Playwright browsers...
+      - pwsh playwright-nunit/bin/Release/net9.0/playwright.ps1 install
+  post_build:
+    commands:
+      - echo Running Playwright tests...
+      - dotnet test --configuration Release --no-build --logger "html;LogFileName=index.html"
+artifacts:
+  files:
+    - '**/TestResults/**/*'
+  discard-paths: yes
