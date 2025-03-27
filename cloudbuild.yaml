@@ -9,7 +9,7 @@ steps:
 
       # Build the project
       dotnet build --configuration Release
-      pwsh playwright-nunit/bin/Release/net9.0/playwright.ps1 install --with-deps chromium
+      pwsh playwright-nunit/bin/Release/net8.0/playwright.ps1 install --with-deps chromium
 
       # Run Playwright Tests
       dotnet test --configuration Release --no-build --logger "html;LogFileName=index.html"
