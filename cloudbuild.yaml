@@ -1,0 +1,25 @@
+steps:
+  # Step 1: Use Playwright Docker image
+  - name: 'mcr.microsoft.com/dotnet/sdk:9.0'
+    env:
+      - 'CI=true'
+    script: |
+      # Restore dependencies
+      dotnet restore
+
+      # Build the project
+      dotnet build --configuration Release
+      pwsh playwright-nunit/bin/Release/net9.0/playwright.ps1 install --with-deps chromium
+
+      # Run Playwright Tests
+      dotnet test --configuration Release --no-build --logger "html;LogFileName=index.html"
+artifacts:
+  objects:
+    location: gs://bootcamp-axone/pw-csharp-reports/
+    paths:
+      - 'playwright-nunit/TestResults/**'
+options:
+  machineType: 'E2_HIGHCPU_8'  # Adjust based on test load
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: 1200s  # Increase timeout if needed
